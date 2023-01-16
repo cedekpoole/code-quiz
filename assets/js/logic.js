@@ -8,16 +8,6 @@ var endScreenEl = document.querySelector("#end-screen");
 var finalScoreEl = document.querySelector("#final-score");
 var feedbackEl = document.querySelector("#feedback");
 
-// create button elements for the multiple choice options
-var btn1 = document.createElement("button");
-var btn2 = document.createElement("button");
-var btn3 = document.createElement("button");
-var btn4 = document.createElement("button");
-choicesEl.appendChild(btn1);
-choicesEl.appendChild(btn2);
-choicesEl.appendChild(btn3);
-choicesEl.appendChild(btn4);
-
 var timeLeft = questions.length * 10;
 // create a countdown function
 let countdown = () => {
@@ -26,19 +16,25 @@ let countdown = () => {
     timeEl.textContent = timeLeft;
     if (timeLeft <= 0 || runningQ === questions.length) {
       clearInterval(timeInterval);
-      timeEl.textContent = "";
-      questionContainerEl.style.display = "none";
-      endScreenEl.style.display = "block";
-      finalScoreEl.textContent = timeLeft;
+      // If the user reaches 0 seconds, it is the end of the quiz (they score a 0)
+      if (timeLeft < 0) {
+        timeLeft = 0;
+      }
+      EndQuiz();
     }
   }, 1000);
-}
+};
+
+// When I press the start button, the welcome page is hidden,
+// the first question and potential answers to said question become visible
+// + the countdown starts (from 80 seconds)
+
 // When the start button is clicked, hide the start screen display and render the first question
 startBtn.addEventListener("click", () => {
   startScreen.setAttribute("class", "hide");
   questionContainerEl.removeAttribute("class");
   runningQ = 0;
-  renderQ();
+  renderQuestion();
   countdown();
 });
 
@@ -46,54 +42,50 @@ startBtn.addEventListener("click", () => {
 var runningQ = 0;
 var q = questions[runningQ];
 
-var renderQ = () => {
+var renderQuestion = () => {
   questionEl.textContent = q.question;
-  btn1.textContent = q.options[0];
-  btn2.textContent = q.options[1];
-  btn3.textContent = q.options[2];
-  btn4.textContent = q.options[3];
-}
-
-
+  var optionBtn = "";
+  // use a loop to render the options as buttons 
+  for (var key in q.options) {
+    optionBtn += `<button>${q.options[key]}</button>`;
+    choicesEl.innerHTML = optionBtn;
+  }
+};
+// create an event listener for when an answer is clicked
 choicesEl.addEventListener("click", (e) => {
-    var usrAnswer = e.target.textContent;
-    if (timeLeft > 0 && runningQ < questions.length - 1) {
-        if (usrAnswer === questions[runningQ].answerIndex) {
-            feedbackEl.textContent = "Correct Answer!";
-            feedbackEl.style.display = "block"
-            feedbackEl.style.color = "green";
-        } else {
-            feedbackEl.textContent = "Wrong Answer!";
-            feedbackEl.style.display = "block";
-            feedbackEl.style.color = "red";
-            timeLeft -= 10; 
-        }
-        setTimeout(function() {
-            feedbackEl.style.display = "none";
-        }, 1000)
-        runningQ++
-        renderQ();
-    } 
+  e.preventDefault();
+  // get user answer by placing what is clicked into a variable 
+  var usrAnswer = e.target.textContent;
+  if (timeLeft > 0 && runningQ <= questions.length) {
+    if (usrAnswer === questions[runningQ].answerIndex) {
+      feedbackEl.textContent = "Correct Answer!";
+      feedbackEl.style.display = "block";
+      feedbackEl.style.color = "green";
+    } else {
+    // If the user gets the question wrong, time is deducted from the countdown (15 seconds)
+      feedbackEl.textContent = "Wrong Answer!";
+      feedbackEl.style.display = "block";
+      feedbackEl.style.color = "red";
+      timeLeft -= 15;
+    }
+    // have it so the feedback element is only visible for one second
+    setTimeout(function () {
+      feedbackEl.style.display = "none";
+    }, 1000);
+    // increment index of the question object 
+    runningQ++;
+    q = questions[runningQ];
+    renderQuestion();
+  }
 });
 
 function EndQuiz() {
-    endScreenEl.removeAttribute("class");
-    
+  endScreenEl.removeAttribute("class");
+  timeEl.textContent = "";
+  questionContainerEl.classList = "hide";
+  // When the user completes all questions, the remaining time becomes their score
+  finalScoreEl.textContent = timeLeft;
 }
-
-
-
-// create an event listener for when the right answer is clicked 
-
-
-// When I press the start button, the welcome page is hidden,
-// the first question and potential answers to said question become visible
-// + the countdown starts (from 60 seconds)
-
-// If the user gets the question wrong, time is deducted from the countdown (15 seconds)
-
-// When the user completes all questions, the remaining time becomes their score
-// If the user reaches 0 seconds, it is the end of the quiz (they score a 0)
 
 // Save the score to localStorage (the scores will be displayed from highest to lowest) - allow the user to clear high score
 // data with a click of a button
