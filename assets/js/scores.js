@@ -12,13 +12,15 @@ clearBtn.addEventListener("click", () => {
 });
 
 function showHighScores() {
-    var scoreParse = JSON.parse(window.localStorage.getItem("highscore")) || [];
+    // if there are values in the highscore key, place them in a variable
+    // otherwise, set the variable to an empty array
+    var scoreObjects = JSON.parse(window.localStorage.getItem("highscore")) || [];
     // sort the scores from highest to lowest
-    scoreParse.sort((num1, num2) => {
+    scoreObjects.sort((num1, num2) => {
         return num2.hScore - num1.hScore;
     })
     // for each user (their score + initials) in the local storage, append their details onto the high score list
-    scoreParse.forEach(points => {
+    scoreObjects.forEach(points => {
         var scoreLi = document.createElement("li");
         scoreLi.textContent = `${points.initials}: ${points.hScore}`;
         highscoreList.appendChild(scoreLi);
