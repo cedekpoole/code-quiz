@@ -19,6 +19,9 @@ var finalScoreEl = document.querySelector("#final-score");
 var correctAudio = new Audio("assets/sfx/correct.wav");
 var wrongAudio = new Audio("assets/sfx/incorrect.wav");
 
+var submitBtn = document.querySelector("#submit");
+var initialsInput = document.querySelector("#initials");
+
 // time = 80 seconds (8 questions)
 var timeLeft = questions.length * 10;
 
@@ -108,3 +111,28 @@ function EndQuiz() {
   // When the user completes all questions, the remaining time becomes their score
   finalScoreEl.textContent = timeLeft;
 }
+
+submitBtn.addEventListener("click", () => {
+    //If the text input is empty, prompt the user to retry
+    if (initialsInput.value === "") {
+      alert("Please put in your initials!");
+    } else {
+      // If there has been previous high scores, make 'scoreParse' equal to that
+      // If there has been no previous high scores, make the variable equal to an empty array
+      // JSON.parse converts a string back into an object
+      var scoreParse = JSON.parse(window.localStorage.getItem("highscore")) || [];
+      // create a new object for the most recent player
+      var scoreObject = {
+        hScore: timeLeft,
+        initials: initialsInput.value,
+      };
+  
+      // add the new user details into local storage - place it into the scoreParse array
+      scoreParse.push(scoreObject);
+      // convert object back into a string
+      window.localStorage.setItem("highscore", JSON.stringify(scoreParse));
+  
+      // once the button has been pressed, redirect the user to the highscores HTML page
+      window.location.href = "highscores.html";
+    }
+  });
