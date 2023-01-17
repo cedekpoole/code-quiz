@@ -65,6 +65,7 @@ var renderQuestion = () => {
     choicesEl.innerHTML = optionBtn;
   }
 };
+
 // create an event listener for when an option is clicked
 choicesEl.addEventListener("click", (e) => {
   e.preventDefault();
@@ -100,13 +101,10 @@ choicesEl.addEventListener("click", (e) => {
 function EndQuiz() {
   // show the end screen
   endScreenEl.removeAttribute("class");
-
   // remove timer content
   timeEl.textContent = "";
-
   // hide question container
   questionContainerEl.classList = "hide";
-
   // When the user completes all questions, the remaining time becomes their score
   finalScoreEl.textContent = timeLeft;
 }
