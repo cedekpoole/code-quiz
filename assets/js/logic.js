@@ -14,13 +14,13 @@ var feedbackEl = document.querySelector("#feedback");
 // HTML elements concerning the end screen
 var endScreenEl = document.querySelector("#end-screen");
 var finalScoreEl = document.querySelector("#final-score");
+var submitBtn = document.querySelector("#submit");
+var initialsInput = document.querySelector("#initials");
 
 // Place audio wav files into variables
 var correctAudio = new Audio("assets/sfx/correct.wav");
 var wrongAudio = new Audio("assets/sfx/incorrect.wav");
-
-var submitBtn = document.querySelector("#submit");
-var initialsInput = document.querySelector("#initials");
+var startAudio = new Audio("assets/sfx/start.wav");
 
 // time = 80 seconds (8 questions)
 var timeLeft = questions.length * 10;
@@ -50,6 +50,7 @@ startBtn.addEventListener("click", () => {
   startScreen.setAttribute("class", "hide");
   questionContainerEl.removeAttribute("class");
   runningQ = 0;
+  startAudio.play();
   renderQuestion();
   countdown();
 });
