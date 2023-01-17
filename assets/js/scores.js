@@ -13,9 +13,11 @@ clearBtn.addEventListener("click", () => {
 
 function showHighScores() {
     var scoreParse = JSON.parse(window.localStorage.getItem("highscore")) || [];
+    // sort the scores from highest to lowest
     scoreParse.sort((num1, num2) => {
         return num2.hScore - num1.hScore;
     })
+    // for each user (their score + initials) in the local storage, append their details onto the high score list
     scoreParse.forEach(points => {
         var scoreLi = document.createElement("li");
         scoreLi.textContent = `${points.initials}: ${points.hScore}`;
@@ -24,4 +26,5 @@ function showHighScores() {
     })
 }
 
+//execute the function when the page loads (allow highscores to show)
 showHighScores();
