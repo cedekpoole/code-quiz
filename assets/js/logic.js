@@ -1,11 +1,9 @@
-
 // Select elements within the start screen
 var startBtn = document.querySelector("#start");
 var startScreen = document.querySelector("#start-screen");
 
 // Select span with the ID of 'time'
 var timeEl = document.querySelector("#time");
-
 
 // Select HTML elements for the question screen
 var questionContainerEl = document.querySelector("#questions");
@@ -18,9 +16,8 @@ var endScreenEl = document.querySelector("#end-screen");
 var finalScoreEl = document.querySelector("#final-score");
 
 // Place audio wav files into variables
-var correctAudio = new Audio('assets/sfx/correct.wav');
-var wrongAudio = new Audio('assets/sfx/incorrect.wav');
-
+var correctAudio = new Audio("assets/sfx/correct.wav");
+var wrongAudio = new Audio("assets/sfx/incorrect.wav");
 
 // time = 80 seconds (8 questions)
 var timeLeft = questions.length * 10;
@@ -62,7 +59,7 @@ var q = questions[runningQ];
 var renderQuestion = () => {
   questionEl.textContent = q.question;
   var optionBtn = "";
-  // use a loop to render the options as buttons 
+  // use a loop to render the options as buttons
   for (var key in q.options) {
     optionBtn += `<button>${q.options[key]}</button>`;
     choicesEl.innerHTML = optionBtn;
@@ -71,7 +68,7 @@ var renderQuestion = () => {
 // create an event listener for when an option is clicked
 choicesEl.addEventListener("click", (e) => {
   e.preventDefault();
-  // get user answer by placing what is clicked into a variable 
+  // get user answer by placing what is clicked into a variable
   var usrAnswer = e.target.textContent;
   if (timeLeft > 0 && runningQ < questions.length) {
     if (usrAnswer === questions[runningQ].answerIndex) {
@@ -80,7 +77,7 @@ choicesEl.addEventListener("click", (e) => {
       feedbackEl.style.color = "#C1D37F";
       correctAudio.play();
     } else {
-    // If the user gets the question wrong, time is deducted from the countdown (15 seconds)
+      // If the user gets the question wrong, time is deducted from the countdown (15 seconds)
       feedbackEl.textContent = "Wrong Answer!";
       feedbackEl.style.display = "block";
       feedbackEl.style.color = "#89023E";
@@ -91,7 +88,7 @@ choicesEl.addEventListener("click", (e) => {
     setTimeout(function () {
       feedbackEl.style.display = "none";
     }, 1000);
-    // increment index of the question object 
+    // increment index of the question object
     runningQ++;
     q = questions[runningQ];
     // render new question
@@ -99,19 +96,17 @@ choicesEl.addEventListener("click", (e) => {
   }
 });
 
-// create function that executes when quiz has ended 
+// create function that executes when quiz has ended
 function EndQuiz() {
   // show the end screen
   endScreenEl.removeAttribute("class");
 
-  // remove timer content 
+  // remove timer content
   timeEl.textContent = "";
 
-  // hide question container 
+  // hide question container
   questionContainerEl.classList = "hide";
 
   // When the user completes all questions, the remaining time becomes their score
   finalScoreEl.textContent = timeLeft;
 }
-
-
